@@ -80,21 +80,23 @@
   },
   {
     "name": "Sony Store · PS5 Disc",
-    "type": "shopify_collection",
-    "url": "https://store.sony.co.th/collections/console",
+    "type": "shopify_search",
+    "url": "https://store.sony.co.th",
     "model_regex": "CFI-2\\d{3}[\\s-]*A|PlayStation\\W{0,3}5|PS5",
     "max_price": 20990,
     "exclude_regex": "Digital|Pro(?![a-z])|Portal|DualSense|Controller|Cover|Stand|Drive|Pulse|Camera|Remote|Charg|Headset|Game",
-    "min_price": 15000
+    "min_price": 15000,
+    "query": "PS5 Console"
   },
   {
     "name": "Sony Store · PS5 Pro",
-    "type": "shopify_collection",
-    "url": "https://store.sony.co.th/collections/console",
+    "type": "shopify_search",
+    "url": "https://store.sony.co.th",
     "model_regex": "CFI-7\\d{3}|(PlayStation\\W{0,3}5|PS5)\\W{0,3}Pro",
     "max_price": 30990,
     "exclude_regex": "Portal|DualSense|Controller|Cover|Stand|Drive|Pulse|Headset|Game",
-    "min_price": 25000
+    "min_price": 25000,
+    "query": "PS5 Pro"
   },
   {
     "name": "dotlife · PS5 Disc",

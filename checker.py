@@ -198,7 +198,31 @@ def check_magento_search(p):
     return offers  # empty = console not listed
 
 
-CHECKERS = {"jsonld": check_jsonld, "magento_search": check_magento_search, "advice": check_advice, "shopify": check_shopify,
+def check_shopify_search(p):
+    """Shopify search suggestions (Sony Store TH hides sold-out consoles, so watch the search):
+    keep products matching `model_regex`, not `exclude_regex`, priced at least `min_price`."""
+    shop = p["url"].rstrip("/")
+    q = urllib.parse.urlencode({"q": p["query"], "resources[type]": "product", "resources[limit]": 10})
+    data = json.loads(fetch(f"{shop}/search/suggest.json?{q}", accept="application/json"))
+    items = (((data.get("resources") or {}).get("results") or {}).get("products"))
+    if items is None:
+        raise ValueError("ไม่พบผลค้นหาสินค้า")
+    offers = []
+    for it in items:
+        key = f"{it.get('title', '')} {it.get('handle', '')}"
+        if not re.search(p["model_regex"], key, re.I):
+            continue
+        if p.get("exclude_regex") and re.search(p["exclude_regex"], key, re.I):
+            continue
+        price = to_price(it.get("price"))
+        if price is not None and price < p.get("min_price", 0):
+            continue
+        offers.append({"available": bool(it.get("available")), "price": price,
+                       "url": f"{shop}/products/{it.get('handle')}"})
+    return offers  # empty = console not listed
+
+
+CHECKERS = {"jsonld": check_jsonld, "magento_search": check_magento_search, "shopify_search": check_shopify_search, "advice": check_advice, "shopify": check_shopify,
             "shopify_collection": check_shopify_collection, "powerbuy_search": check_powerbuy_search}
 
 
