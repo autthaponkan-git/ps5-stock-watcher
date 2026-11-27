@@ -114,7 +114,12 @@ def check_advice(p):
 
 def check_shopify(p):
     """Shopify stores (Sony Store TH): <product-url>.js gives availability + price (satang)."""
-    data = json.loads(fetch(p["url"].rstrip("/") + ".js", accept="application/json"))
+    try:
+        data = json.loads(fetch(p["url"].rstrip("/") + ".js", accept="application/json"))
+    except urllib.error.HTTPError as e:
+        if e.code == 404 and p.get("missing_ok"):
+            return []
+        raise
     price = data.get("price")
     return [{"available": bool(data.get("available")),
              "price": price / 100 if isinstance(price, (int, float)) else to_price(price),

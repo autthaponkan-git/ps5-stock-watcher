@@ -52,6 +52,15 @@
     "disabled_reason": "เว็บบล็อกเครื่องของ GitHub (HTTP 403)"
   },
   {
+    "name": "HomePro · PS5 Slim Disc",
+    "type": "jsonld",
+    "url": "https://www.homepro.co.th/p/1306437",
+    "out_markers": [
+      "ga-stockout"
+    ],
+    "max_price": 20990
+  },
+  {
     "name": "HomePro · PS5 Pro",
     "type": "jsonld",
     "url": "https://www.homepro.co.th/p/1276435",
@@ -79,7 +88,14 @@
     "disabled_reason": "เว็บบล็อกเครื่องของ GitHub (HTTP 403)"
   },
   {
-    "name": "Sony Store · PS5 Disc",
+    "name": "Sony Store · PS5 Disc (หน้าสินค้า)",
+    "type": "shopify",
+    "missing_ok": true,
+    "url": "https://store.sony.co.th/products/ps5-console-e-disc-edition",
+    "max_price": 20990
+  },
+  {
+    "name": "Sony Store · PS5 Disc (ค้นหา)",
     "type": "shopify_search",
     "url": "https://store.sony.co.th",
     "model_regex": "CFI-2\\d{3}[\\s-]*A|PlayStation\\W{0,3}5|PS5",
@@ -89,7 +105,7 @@
     "query": "PS5 Console"
   },
   {
-    "name": "Sony Store · PS5 Pro",
+    "name": "Sony Store · PS5 Pro (ค้นหา)",
     "type": "shopify_search",
     "url": "https://store.sony.co.th",
     "model_regex": "CFI-7\\d{3}|(PlayStation\\W{0,3}5|PS5)\\W{0,3}Pro",
