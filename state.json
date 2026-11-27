@@ -2,5 +2,88 @@
   "autotest_remaining": 4,
   "autotest_total": 4,
   "heartbeat": "2026-11-27",
-  "items": {}
+  "items": {
+    "Advice · PS5 Pro": {
+      "available": false,
+      "error": "HTTP 403",
+      "fails": 1,
+      "status": "error"
+    },
+    "Advice · PS5 Pro New Version": {
+      "available": false,
+      "error": "HTTP 403",
+      "fails": 1,
+      "status": "error"
+    },
+    "HomePro · PS5 Pro": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": 30990.0,
+      "status": "ok"
+    },
+    "JIB · PS5 Pro": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": 30990.0,
+      "status": "ok"
+    },
+    "JIB · PS5 Pro 2TB New Model": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": 30990.0,
+      "status": "ok"
+    },
+    "JIB · PS5 Slim Disc": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": 20990.0,
+      "status": "ok"
+    },
+    "JIB · PS5 Slim Disc E-Chassis + จอย 2": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": 22990.0,
+      "status": "ok"
+    },
+    "Power Buy · PS5 Disc (ค้นหา)": {
+      "available": false,
+      "error": "HTTP 403",
+      "fails": 1,
+      "status": "error"
+    },
+    "Power Buy · PS5 Pro (ค้นหา)": {
+      "available": false,
+      "error": "HTTP 403",
+      "fails": 1,
+      "status": "error"
+    },
+    "Sony Store · PS5 Disc (CFI-2118)": {
+      "available": false,
+      "error": "HTTP 404",
+      "fails": 1,
+      "status": "error"
+    },
+    "Sony Store · PS5 Pro": {
+      "available": false,
+      "error": "HTTP 404",
+      "fails": 1,
+      "status": "error"
+    },
+    "Sony Store · PS5 Slim Disc": {
+      "available": false,
+      "error": "HTTP 404",
+      "fails": 1,
+      "status": "error"
+    }
+  }
 }
