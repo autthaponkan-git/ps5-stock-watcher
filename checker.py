@@ -160,9 +160,16 @@ def check_shopify_collection(p):
     for prod in products:
         for v in prod.get("variants", []):
             key = f"{prod.get('title', '')} {prod.get('handle', '')} {v.get('sku', '')} {v.get('title', '')}"
-            if re.search(p["model_regex"], key, re.I) and not re.search(p.get("exclude_regex", r"(?!x)x"), key, re.I):
-                offers.append({"available": bool(v.get("available")), "price": to_price(v.get("price")),
-                               "url": f"{shop}/products/{prod.get('handle')}"})
+            if not re.search(p["model_regex"], key, re.I):
+                continue
+            if p.get("exclude_regex") and re.search(p["exclude_regex"], key, re.I):
+                continue
+            price = to_price(v.get("price"))
+            if price is not None and price < p.get("min_price", 0):
+                continue  # accessories
+            offers.append({"available": bool(v.get("available")), "price": price,
+                           "url": f"{shop}/products/{prod.get('handle')}"})
+    print(f"   {p['name']}: {len(products)} products in collection, {len(offers)} matched")
     return offers
 
 
