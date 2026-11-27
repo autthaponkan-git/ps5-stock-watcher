@@ -15,6 +15,24 @@
       "fails": 1,
       "status": "error"
     },
+    "Banana · PS5 Pro": {
+      "available": false,
+      "error": "HTTP 403",
+      "fails": 1,
+      "status": "error"
+    },
+    "Banana · PS5 Pro New Version": {
+      "available": false,
+      "error": "HTTP 403",
+      "fails": 1,
+      "status": "error"
+    },
+    "Banana · PS5 Slim Disc": {
+      "available": false,
+      "error": "HTTP 403",
+      "fails": 1,
+      "status": "error"
+    },
     "HomePro · PS5 Pro": {
       "alerted": false,
       "available": false,
