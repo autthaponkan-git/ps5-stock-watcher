@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       test_email:
-        description: "ส่งอีเมลทดสอบ (true/false)"
+        description: "ส่งข้อความทดสอบ (Gmail + LINE)"
         type: boolean
         default: false
 
@@ -28,22 +28,27 @@ jobs:
         with:
           python-version: "3.12"
 
-      - name: Send test email
+      - name: Send test message
         if: ${{ inputs.test_email }}
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
-        run: python checker.py --test-email
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+        run: python checker.py --test
 
       - name: Check stock
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
           MAIL_TO: ${{ secrets.MAIL_TO }}
+          LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
+          LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
         run: python checker.py
 
       - name: Save state
+        if: ${{ always() }}
         run: |
           git config user.name "stock-bot"
           git config user.email "stock-bot@users.noreply.github.com"

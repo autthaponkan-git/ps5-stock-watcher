@@ -85,6 +85,47 @@ def send_email(subject, body):
     print(f"email sent: {subject}")
 
 
+def send_line(text):
+    """Push a message to yourself via a LINE Official Account (Messaging API)."""
+    token = os.environ["LINE_CHANNEL_ACCESS_TOKEN"].strip()
+    to = os.environ["LINE_USER_ID"].strip()
+    payload = json.dumps({"to": to, "messages": [{"type": "text", "text": text[:5000]}]}).encode()
+    req = urllib.request.Request(
+        "https://api.line.me/v2/bot/message/push", data=payload, method="POST",
+        headers={"Content-Type": "application/json", "Authorization": f"Bearer {token}"})
+    with urllib.request.urlopen(req, timeout=30) as r:
+        r.read()
+    print("LINE sent")
+
+
+def notify(subject, body):
+    """Send via every configured channel; one failing does not block the other."""
+    sent, errors = 0, []
+    channels = []
+    if os.environ.get("GMAIL_USER") and os.environ.get("GMAIL_APP_PASSWORD"):
+        channels.append(("Gmail", lambda: send_email(subject, body)))
+    if os.environ.get("LINE_CHANNEL_ACCESS_TOKEN") and os.environ.get("LINE_USER_ID"):
+        channels.append(("LINE", lambda: send_line(f"{subject}\n\n{body}")))
+    for name, fn in channels:
+        try:
+            fn()
+            sent += 1
+        except Exception as e:
+            errors.append(f"{name}: {e}")
+            print(f"[NOTIFY FAIL] {name}: {e}")
+    if not sent:
+        raise RuntimeError("no notification sent: " + ("; ".join(errors) or "no channel configured"))
+    if errors:  # make the workflow run show red so a broken channel gets noticed
+        raise RuntimeError("some channels failed: " + "; ".join(errors))
+
+
+def try_notify(subject, body):
+    try:
+        notify(subject, body)
+    except Exception as e:
+        print(f"[NOTIFY FAIL] {e}")
+
+
 def load_state():
     if STATE_FILE.exists():
         return json.loads(STATE_FILE.read_text(encoding="utf-8"))
@@ -92,8 +133,8 @@ def load_state():
 
 
 def main():
-    if "--test-email" in sys.argv:
-        send_email("✅ ทดสอบระบบแจ้งเตือน PS5", "ถ้าได้รับอีเมลนี้ แปลว่าระบบส่งแจ้งเตือนทำงานปกติครับ")
+    if "--test-email" in sys.argv or "--test" in sys.argv:
+        notify("✅ ทดสอบระบบแจ้งเตือน PS5", "ถ้าได้รับข้อความนี้ แปลว่าระบบส่งแจ้งเตือนช่องทางนี้ทำงานปกติครับ")
         return
 
     dry = "--dry-run" in sys.argv
@@ -113,7 +154,7 @@ def main():
             st["fails"] = st.get("fails", 0) + 1
             print(f"[FAIL x{st['fails']}] {p['name']}: {e}")
             if st["fails"] == FAIL_ALERT_AFTER and not dry:
-                send_email(f"⚠️ เช็คสต็อกไม่ได้: {p['name']}",
+                try_notify(f"⚠️ เช็คสต็อกไม่ได้: {p['name']}",
                            f"ระบบเช็คหน้านี้ไม่สำเร็จติดกัน {FAIL_ALERT_AFTER} ครั้งแล้ว\n"
                            f"สาเหตุล่าสุด: {e}\n\n{url}\n\nหน้าเว็บอาจเปลี่ยน หรือสินค้าถูกลบไปแล้ว")
             continue
@@ -132,7 +173,9 @@ def main():
         for p, price_txt in hits:
             body += f"🎮 {p['name']}\n   ราคา: {price_txt}\n   👉 {p['url']}\n\n"
         body += f"ตรวจพบเมื่อ {now:%d/%m/%Y %H:%M} น."
-        send_email(f"🔥 PS5 มีของแล้ว: {names}", body)
+        # save state first so a notify error can't cause repeat alerts every run
+        STATE_FILE.write_text(json.dumps(state, ensure_ascii=False, indent=2), encoding="utf-8")
+        notify(f"🔥 PS5 มีของแล้ว: {names}", body)
 
     # Heartbeat so the repo has activity (GitHub pauses idle scheduled workflows).
     state["_heartbeat"] = now.strftime("%Y-%m-%d")
