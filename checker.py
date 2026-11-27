@@ -63,8 +63,14 @@ def iter_offers(node):
 
 def check_jsonld(p):
     """Generic: schema.org JSON-LD on the product page (JIB, HomePro...).
-    `out_markers` = regexes that, if present, mean sold out even when JSON-LD says InStock."""
-    html = fetch(p["url"])
+    `out_markers` = regexes that, if present, mean sold out even when JSON-LD says InStock.
+    `missing_ok` = the store removes sold-out pages (HTTP 404), so 404 means "not listed"."""
+    try:
+        html = fetch(p["url"])
+    except urllib.error.HTTPError as e:
+        if e.code == 404 and p.get("missing_ok"):
+            return []
+        raise
     available, price, found = False, None, False
     for block in re.findall(r'<script[^>]*application/ld\+json[^>]*>(.*?)</script>', html, re.S | re.I):
         try:
