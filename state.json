@@ -41,6 +41,14 @@
       "price": 30990.0,
       "status": "ok"
     },
+    "HomePro · PS5 Slim Disc": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": 20990.0,
+      "status": "ok"
+    },
     "JIB · PS5 Pro": {
       "alerted": false,
       "available": false,
@@ -93,7 +101,31 @@
       "price": null,
       "status": "ok"
     },
+    "Sony Store · PS5 Disc (ค้นหา)": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": null,
+      "status": "ok"
+    },
+    "Sony Store · PS5 Disc (หน้าสินค้า)": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": null,
+      "status": "ok"
+    },
     "Sony Store · PS5 Pro": {
+      "alerted": false,
+      "available": false,
+      "error": null,
+      "fails": 0,
+      "price": null,
+      "status": "ok"
+    },
+    "Sony Store · PS5 Pro (ค้นหา)": {
       "alerted": false,
       "available": false,
       "error": null,
