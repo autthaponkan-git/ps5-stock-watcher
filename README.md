@@ -1,25 +1,37 @@
 # PS5 Stock Watcher
 
 เช็คสต็อก PS5 Slim Disc / PS5 Pro ทุก 5 นาทีบน GitHub Actions (ทำงานแม้ปิดคอม)
-เมื่อมีของเข้า **และราคาไม่เกินราคาป้าย** จะแจ้งเตือนทาง Gmail และ LINE พร้อมลิงก์ไปหน้าสินค้า
+เมื่อมีของเข้า **และราคาไม่เกินราคาป้าย** จะแจ้งเตือนทาง LINE (และ Gmail ถ้าตั้งไว้) พร้อมลิงก์ไปหน้าสินค้า
 
 - แจ้งเตือนครั้งเดียวต่อการกลับมามีของแต่ละรอบ (ไม่ส่งซ้ำทุก 5 นาที)
-- ถ้าเช็คหน้าไหนไม่ได้ติดกัน 12 ครั้ง (~1 ชม.) จะส่งอีเมลเตือนว่าระบบมีปัญหา
+- ถ้าเช็คร้านไหนไม่ได้ติดกัน 12 ครั้ง (~1 ชม.) จะแจ้งเตือนว่าร้านนั้นมีปัญหา
+- รายงานสถานะ (health report) เวลา 10:00, 12:00, 13:00, 18:00, 20:00 น.
 
-## แก้รายการสินค้า
-แก้ไฟล์ `products.json` เพิ่ม/ลบสินค้าได้ (`max_price` = ราคาสูงสุดที่ยอมรับ)
-รองรับเว็บที่มีข้อมูลสินค้าแบบ schema.org (JSON-LD) เช่น JIB
+## ร้านที่เฝ้า (`products.json`)
+| type | ร้าน | วิธีเช็ค |
+|---|---|---|
+| `jsonld` | JIB, HomePro | ข้อมูล schema.org ในหน้าสินค้า + `out_markers` |
+| `advice` | Advice | กล่อง "ราคาเฉพาะออนไลน์" (ราคา หรือ "สินค้าหมด") |
+| `powerbuy_search` | Power Buy | หน้าค้นหา แล้วกรองรุ่นด้วย `model_regex` (Power Buy ซ่อนสินค้าที่หมด) |
+| `shopify` | Sony Store TH | `<url>.js` |
 
-## ตั้งค่า Secrets (Settings → Secrets and variables → Actions)
+`max_price` = ราคาสูงสุดที่ยอมรับ
+
+## Secrets (Settings → Secrets and variables → Actions)
 | ชื่อ | ค่า |
 |---|---|
-| `GMAIL_USER` | อีเมล Gmail ที่ใช้ส่ง |
-| `GMAIL_APP_PASSWORD` | App Password 16 ตัวจาก https://myaccount.google.com/apppasswords |
-| `MAIL_TO` | (ไม่บังคับ) อีเมลผู้รับ ถ้าไม่ใส่จะส่งหาตัวเอง |
 | `LINE_CHANNEL_ACCESS_TOKEN` | Channel access token (long-lived) จาก LINE Developers → แท็บ Messaging API |
 | `LINE_USER_ID` | Your user ID (ขึ้นต้นด้วย U) จาก LINE Developers → แท็บ Basic settings |
+| `GMAIL_USER` / `GMAIL_APP_PASSWORD` / `MAIL_TO` | (ไม่บังคับ) สำหรับส่งอีเมล |
 
-ช่องทางไหนไม่ได้ใส่ secret ระบบจะข้ามช่องทางนั้นไป
+ช่องทางไหนไม่ได้ใส่ secret ระบบจะข้ามไป
 
 ## ทดสอบ
-Actions → PS5 stock check → Run workflow → ติ๊ก "ส่งข้อความทดสอบ"
+- ส่งข้อความทดสอบ: Actions → PS5 stock check → Run workflow → ติ๊ก "ส่งข้อความทดสอบ"
+- รายงานสถานะทันที: Actions → Health report → Run workflow
+- ทดสอบว่ารันอัตโนมัติจริง: ตั้ง `"autotest_remaining": N, "autotest_total": N` ใน `state.json`
+  ระบบจะส่งข้อความ "🔁 ทดสอบรันอัตโนมัติ" ทุกรอบที่ GitHub รันเอง จนครบ N รอบแล้วหยุดเอง
+
+## โควตา LINE
+แพ็กเกจฟรีส่งได้ประมาณ 300 ข้อความ/เดือน รายงานสถานะ 5 ครั้ง/วัน ใช้ ~150 ข้อความ/เดือน
+(รายงานแสดงยอดที่ใช้ไปทุกครั้ง)
