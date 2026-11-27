@@ -153,8 +153,8 @@ def check_shopify_collection(p):
     base = p["url"].split("?")[0].rstrip("/")
     data = json.loads(fetch(base + "/products.json?limit=250", accept="application/json"))
     products = data.get("products")
-    if products is None:
-        raise ValueError("ไม่พบรายการสินค้าในคอลเลกชัน")
+    if not products:
+        raise ValueError(f"คอลเลกชันว่าง (ได้ {len(products or [])} สินค้า)")
     shop = base.split("/collections/")[0]
     offers = []
     for prod in products:

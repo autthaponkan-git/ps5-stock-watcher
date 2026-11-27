@@ -123,20 +123,26 @@
     "missing_ok": true,
     "url": "https://www.bnn.in.th/th/p/gaming-gear/console/playstation-0/sony-playstation-5-slim-disc-edition-4948872415927_z966ng",
     "max_price": 20990,
-    "note": "Banana ลบหน้าสินค้าตอนของหมด (404) ระบบจะเตือนเมื่อหน้ากลับมาพร้อมของ"
+    "note": "Banana ลบหน้าสินค้าตอนของหมด (404) ระบบจะเตือนเมื่อหน้ากลับมาพร้อมของ",
+    "disabled": true,
+    "disabled_reason": "เว็บบล็อกเครื่องของ GitHub (HTTP 403)"
   },
   {
     "name": "Banana · PS5 Pro",
     "type": "jsonld",
     "missing_ok": true,
     "url": "https://www.bnn.in.th/th/p/sony-playstation-5-pro-console-4948872416313_dlejqn",
-    "max_price": 30990
+    "max_price": 30990,
+    "disabled": true,
+    "disabled_reason": "เว็บบล็อกเครื่องของ GitHub (HTTP 403)"
   },
   {
     "name": "Banana · PS5 Pro New Version",
     "type": "jsonld",
     "missing_ok": true,
     "url": "https://www.bnn.in.th/th/p/gaming-gear/console/playstation-0/sony-playstation-5-pro-console-new-version-4948872417068_zv4q1p",
-    "max_price": 30990
+    "max_price": 30990,
+    "disabled": true,
+    "disabled_reason": "เว็บบล็อกเครื่องของ GitHub (HTTP 403)"
   }
 ]
