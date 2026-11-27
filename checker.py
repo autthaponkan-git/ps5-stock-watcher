@@ -139,8 +139,33 @@ def check_powerbuy_search(p):
     return offers  # empty list = not listed = not available
 
 
-CHECKERS = {"jsonld": check_jsonld, "advice": check_advice,
-            "shopify": check_shopify, "powerbuy_search": check_powerbuy_search}
+def check_shopify_collection(p):
+    """Shopify collection (Sony Store TH): <collection>/products.json lists every product
+    with per-variant availability, so no need to guess product handles. Matches `model_regex`
+    against title/handle/SKU."""
+    base = p["url"].split("?")[0].rstrip("/")
+    data = json.loads(fetch(base + "/products.json?limit=250", accept="application/json"))
+    products = data.get("products")
+    if products is None:
+        raise ValueError("ไม่พบรายการสินค้าในคอลเลกชัน")
+    shop = base.split("/collections/")[0]
+    offers = []
+    for prod in products:
+        for v in prod.get("variants", []):
+            key = f"{prod.get('title', '')} {prod.get('handle', '')} {v.get('sku', '')} {v.get('title', '')}"
+            if re.search(p["model_regex"], key, re.I) and not re.search(p.get("exclude_regex", r"(?!x)x"), key, re.I):
+                offers.append({"available": bool(v.get("available")), "price": to_price(v.get("price")),
+                               "url": f"{shop}/products/{prod.get('handle')}"})
+    return offers
+
+
+CHECKERS = {"jsonld": check_jsonld, "advice": check_advice, "shopify": check_shopify,
+            "shopify_collection": check_shopify_collection, "powerbuy_search": check_powerbuy_search}
+
+
+def active_products():
+    products = json.loads(PRODUCTS_FILE.read_text(encoding="utf-8"))
+    return [p for p in products if not p.get("disabled")]
 
 
 # ---------------------------------------------------------------- notifications
@@ -226,7 +251,7 @@ def fmt_price(v):
 # ---------------------------------------------------------------- stock check
 
 def run_check(dry):
-    products = json.loads(PRODUCTS_FILE.read_text(encoding="utf-8"))
+    products = active_products()
     state = load_state()
     items = state.setdefault("items", {})
     now = datetime.now(BKK)
@@ -331,7 +356,7 @@ def run_health():
     lines.append("")
     lines.append("ร้านค้า:")
     items = load_state().get("items", {})
-    for p in json.loads(PRODUCTS_FILE.read_text(encoding="utf-8")):
+    for p in active_products():
         st = items.get(p["name"])
         if not st:
             lines.append(f"⏳ {p['name']}: ยังไม่ได้เช็ค")

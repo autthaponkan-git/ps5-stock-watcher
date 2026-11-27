@@ -2,8 +2,8 @@ name: Health report
 
 on:
   schedule:
-    # Bangkok time (UTC+7): 10:00, 12:00, 13:00, 18:00, 20:00 — GitHub may start a few minutes late
-    - cron: "0 3,5,6,11,13 * * *"
+    # Bangkok time (UTC+7): 12:00 and 18:00 — GitHub may start a few minutes late
+    - cron: "0 5,11 * * *"
   workflow_dispatch:
 
 permissions:
