@@ -52,34 +52,34 @@
     "JIB · PS5 Pro": {
       "alerted": false,
       "available": false,
-      "error": "HTTP 403",
-      "fails": 2,
+      "error": null,
+      "fails": 0,
       "price": 30990.0,
-      "status": "error"
+      "status": "ok"
     },
     "JIB · PS5 Pro 2TB New Model": {
       "alerted": false,
       "available": false,
-      "error": "HTTP 403",
-      "fails": 2,
+      "error": null,
+      "fails": 0,
       "price": 30990.0,
-      "status": "error"
+      "status": "ok"
     },
     "JIB · PS5 Slim Disc": {
       "alerted": false,
       "available": false,
-      "error": "HTTP 403",
-      "fails": 2,
+      "error": null,
+      "fails": 0,
       "price": 20990.0,
-      "status": "error"
+      "status": "ok"
     },
     "JIB · PS5 Slim Disc E-Chassis + จอย 2": {
       "alerted": false,
       "available": false,
-      "error": "HTTP 403",
-      "fails": 2,
+      "error": null,
+      "fails": 0,
       "price": 22990.0,
-      "status": "error"
+      "status": "ok"
     },
     "Power Buy · PS5 Disc (ค้นหา)": {
       "available": false,
