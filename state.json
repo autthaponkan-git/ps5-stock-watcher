@@ -1,19 +1,6 @@
 {
-  "https://www.jib.co.th/web/product/readProduct/79396": {
-    "available": false,
-    "fails": 0
-  },
-  "https://www.jib.co.th/web/product/readProduct/84228": {
-    "available": false,
-    "fails": 0
-  },
-  "https://www.jib.co.th/web/product/readProduct/79404": {
-    "available": false,
-    "fails": 0
-  },
-  "https://www.jib.co.th/web/product/readProduct/85102": {
-    "available": false,
-    "fails": 0
-  },
-  "_heartbeat": "2026-11-27"
+  "autotest_remaining": 4,
+  "autotest_total": 4,
+  "heartbeat": "2026-11-27",
+  "items": {}
 }

@@ -1,22 +1,81 @@
 [
   {
-    "name": "PS5 Slim Disc Edition (JIB)",
+    "name": "JIB · PS5 Slim Disc",
+    "type": "jsonld",
     "url": "https://www.jib.co.th/web/product/readProduct/79396",
+    "out_markers": ["class=\"[^\"]*\\bout_stock\\b"],
     "max_price": 20990
   },
   {
-    "name": "PS5 Slim Disc E-Chassis + จอย 2 อัน (JIB)",
+    "name": "JIB · PS5 Slim Disc E-Chassis + จอย 2",
+    "type": "jsonld",
     "url": "https://www.jib.co.th/web/product/readProduct/84228",
+    "out_markers": ["class=\"[^\"]*\\bout_stock\\b"],
     "max_price": 22990
   },
   {
-    "name": "PS5 Pro (JIB)",
+    "name": "JIB · PS5 Pro",
+    "type": "jsonld",
     "url": "https://www.jib.co.th/web/product/readProduct/79404",
+    "out_markers": ["class=\"[^\"]*\\bout_stock\\b"],
     "max_price": 30990
   },
   {
-    "name": "PS5 Pro 2TB New Model (JIB)",
+    "name": "JIB · PS5 Pro 2TB New Model",
+    "type": "jsonld",
     "url": "https://www.jib.co.th/web/product/readProduct/85102",
+    "out_markers": ["class=\"[^\"]*\\bout_stock\\b"],
+    "max_price": 30990
+  },
+  {
+    "name": "Advice · PS5 Pro",
+    "type": "advice",
+    "url": "https://www.advice.co.th/branch-a029/index.php/product/productdetail/A0176904",
+    "max_price": 30990
+  },
+  {
+    "name": "Advice · PS5 Pro New Version",
+    "type": "advice",
+    "url": "https://www.advice.co.th/branch-a029/index.php/product/productdetail/A0182208",
+    "max_price": 30990
+  },
+  {
+    "name": "HomePro · PS5 Pro",
+    "type": "jsonld",
+    "url": "https://www.homepro.co.th/p/1276435",
+    "out_markers": ["ga-stockout"],
+    "max_price": 30990
+  },
+  {
+    "name": "Power Buy · PS5 Disc (ค้นหา)",
+    "type": "powerbuy_search",
+    "url": "https://www.powerbuy.co.th/th/search/PS5",
+    "model_regex": "CFI-2\\d{3}[\\s-]*A01|Console-Ultra-HD-Blu-ray",
+    "max_price": 20990
+  },
+  {
+    "name": "Power Buy · PS5 Pro (ค้นหา)",
+    "type": "powerbuy_search",
+    "url": "https://www.powerbuy.co.th/th/search/PS5",
+    "model_regex": "CFI-7\\d{3}|PS5-Pro|PlayStation-5-Pro",
+    "max_price": 30990
+  },
+  {
+    "name": "Sony Store · PS5 Slim Disc",
+    "type": "shopify",
+    "url": "https://store.sony.co.th/products/cfi-2018a01",
+    "max_price": 20990
+  },
+  {
+    "name": "Sony Store · PS5 Disc (CFI-2118)",
+    "type": "shopify",
+    "url": "https://store.sony.co.th/products/cfi-2118a01",
+    "max_price": 20990
+  },
+  {
+    "name": "Sony Store · PS5 Pro",
+    "type": "shopify",
+    "url": "https://store.sony.co.th/products/cfi-7022b01",
     "max_price": 30990
   }
 ]

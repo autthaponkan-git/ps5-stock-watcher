@@ -5,7 +5,7 @@ on:
     - cron: "*/5 * * * *"   # every 5 minutes (GitHub may delay some runs)
   workflow_dispatch:
     inputs:
-      test_email:
+      test_message:
         description: "ส่งข้อความทดสอบ (Gmail + LINE)"
         type: boolean
         default: false
@@ -29,7 +29,7 @@ jobs:
           python-version: "3.12"
 
       - name: Send test message
-        if: ${{ inputs.test_email }}
+        if: ${{ inputs.test_message }}
         env:
           GMAIL_USER: ${{ secrets.GMAIL_USER }}
           GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
