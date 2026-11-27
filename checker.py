@@ -318,14 +318,16 @@ def run_check(dry):
 
     # Auto-test mode: proves scheduled runs fire by themselves (enabled via state.json).
     remaining = state.get("autotest_remaining", 0)
-    if remaining and os.environ.get("GITHUB_EVENT_NAME") == "schedule":
+    source = os.environ.get("RUN_SOURCE")
+    if remaining and source in ("schedule", "cron"):
         total = state.get("autotest_total", remaining)
         n = total - remaining + 1
         state["autotest_remaining"] = remaining - 1
         save_state(state)
         done = "\n\n✅ ครบทุกรอบแล้ว ปิดโหมดทดสอบอัตโนมัติ" if remaining == 1 else ""
+        who = "cron-job.org" if source == "cron" else "ตัวตั้งเวลาของ GitHub"
         try_notify(f"🔁 ทดสอบรันอัตโนมัติ รอบ {n}/{total}",
-                   f"GitHub รันเช็คสต็อกเองเมื่อ {now:%H:%M} น. โดยไม่มีใครกด{done}")
+                   f"ระบบเช็คสต็อกเองเมื่อ {now:%H:%M} น. โดยไม่มีใครกด (สั่งโดย {who}){done}")
 
     if hits:
         names = ", ".join(p["name"] for p, _ in hits)
@@ -360,7 +362,8 @@ def run_health():
     lines, problems = [], 0
 
     try:
-        runs = [r for r in github_runs() if r["event"] == "schedule"]
+        runs = [r for r in github_runs()
+                if r["event"] == "schedule" or str(r.get("display_title", "")).startswith("auto")]
         since = now - timedelta(hours=24)
         recent = [r for r in runs if datetime.fromisoformat(r["created_at"].replace("Z", "+00:00")) >= since]
         failed = [r for r in recent if r.get("conclusion") == "failure"]

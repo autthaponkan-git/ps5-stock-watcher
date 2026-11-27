@@ -1,4 +1,5 @@
 name: PS5 stock check
+run-name: ${{ github.event_name == 'schedule' && 'auto (GitHub schedule)' || inputs.source == 'cron' && 'auto (cron-job.org)' || 'manual' }}
 
 on:
   schedule:
@@ -9,6 +10,10 @@ on:
         description: "ส่งข้อความทดสอบ (Gmail + LINE)"
         type: boolean
         default: false
+      source:
+        description: "ผู้สั่งรัน (cron = ตัวตั้งเวลาภายนอก)"
+        type: string
+        default: manual
 
 permissions:
   contents: write
@@ -45,6 +50,7 @@ jobs:
           MAIL_TO: ${{ secrets.MAIL_TO }}
           LINE_CHANNEL_ACCESS_TOKEN: ${{ secrets.LINE_CHANNEL_ACCESS_TOKEN }}
           LINE_USER_ID: ${{ secrets.LINE_USER_ID }}
+          RUN_SOURCE: ${{ github.event_name == 'schedule' && 'schedule' || inputs.source }}
         run: python checker.py
 
       - name: Save state
