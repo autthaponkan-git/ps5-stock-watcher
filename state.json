@@ -88,18 +88,18 @@
     "Sony Store · PS5 Disc": {
       "alerted": false,
       "available": false,
-      "error": null,
-      "fails": 0,
+      "error": "ValueError: คอลเลกชันว่าง (ได้ 0 สินค้า)",
+      "fails": 1,
       "price": null,
-      "status": "ok"
+      "status": "error"
     },
     "Sony Store · PS5 Pro": {
       "alerted": false,
       "available": false,
-      "error": null,
-      "fails": 0,
+      "error": "ValueError: คอลเลกชันว่าง (ได้ 0 สินค้า)",
+      "fails": 1,
       "price": null,
-      "status": "ok"
+      "status": "error"
     },
     "dotlife · PS5 Disc": {
       "alerted": false,
