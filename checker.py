@@ -14,6 +14,7 @@ import smtplib
 import sys
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 from datetime import datetime, timedelta, timezone
 from email.mime.text import MIMEText
@@ -159,7 +160,32 @@ def check_shopify_collection(p):
     return offers
 
 
-CHECKERS = {"jsonld": check_jsonld, "advice": check_advice, "shopify": check_shopify,
+def check_magento_search(p):
+    """Magento GraphQL stores (dotlife.store): search `query`, keep items whose name/SKU match
+    `model_regex` and cost at least `min_price` (filters out accessories)."""
+    q = ('{products(search:%s,pageSize:100){items{sku name url_key url_suffix stock_status '
+         'price_range{minimum_price{final_price{value}}}}}}' % json.dumps(p["query"]))
+    data = json.loads(fetch(p["url"] + "?" + urllib.parse.urlencode({"query": q}), accept="application/json"))
+    items = ((data.get("data") or {}).get("products") or {}).get("items")
+    if items is None:
+        raise ValueError(f"GraphQL ไม่ตอบรายการสินค้า: {str(data.get('errors'))[:60]}")
+    site = p["url"].rsplit("/graphql", 1)[0]
+    offers = []
+    for it in items:
+        price = to_price(((it.get("price_range") or {}).get("minimum_price") or {}).get("final_price", {}).get("value"))
+        key = f"{it.get('name', '')} {it.get('sku', '')}"
+        if not re.search(p["model_regex"], key, re.I):
+            continue
+        if p.get("exclude_regex") and re.search(p["exclude_regex"], key, re.I):
+            continue
+        if price is not None and price < p.get("min_price", 0):
+            continue
+        offers.append({"available": it.get("stock_status") == "IN_STOCK", "price": price,
+                       "url": f"{site}/{it.get('url_key')}{it.get('url_suffix') or '.html'}"})
+    return offers  # empty = console not listed
+
+
+CHECKERS = {"jsonld": check_jsonld, "magento_search": check_magento_search, "advice": check_advice, "shopify": check_shopify,
             "shopify_collection": check_shopify_collection, "powerbuy_search": check_powerbuy_search}
 
 
@@ -364,7 +390,7 @@ def run_health():
             problems += 1
             lines.append(f"❌ {p['name']}: เช็คไม่ได้ ({st.get('error')})")
         else:
-            stock = "🔥 มีของ" if st.get("available") else "หมด"
+            stock = "🔥 มีของ" if st.get("available") else ("หมด" if st.get("price") else "หมด/ยังไม่วางขาย")
             price = f" · {st['price']:,.0f}" if st.get("price") else ""
             lines.append(f"✅ {p['name']}: {stock}{price}")
 

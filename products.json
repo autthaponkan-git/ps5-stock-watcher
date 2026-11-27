@@ -91,5 +91,26 @@
     "url": "https://store.sony.co.th/collections/console",
     "model_regex": "CFI-7\\d{3}",
     "max_price": 30990
+  },
+  {
+    "name": "dotlife · PS5 Disc",
+    "type": "magento_search",
+    "url": "https://www.dotlife.store/graphql",
+    "query": "PS5",
+    "model_regex": "PlayStation\\s*5|PS5|CFI-2\\d{3}",
+    "min_price": 12000,
+    "max_price": 20990,
+    "note": "ตอนนี้ร้านยังไม่มีเครื่อง PS5 ขาย — เฝ้าไว้เผื่อนำเข้ามาขาย",
+    "exclude_regex": "Digital|Pro(?![a-z])|Portal|Controller|DualSense"
+  },
+  {
+    "name": "dotlife · PS5 Pro",
+    "type": "magento_search",
+    "url": "https://www.dotlife.store/graphql",
+    "query": "PS5 Pro",
+    "model_regex": "(PlayStation\\s*5|PS5)\\s*Pro|CFI-7\\d{3}",
+    "min_price": 25000,
+    "max_price": 30990,
+    "exclude_regex": "Portal|Controller|DualSense|Stand|Drive"
   }
 ]
