@@ -27,6 +27,7 @@ BKK = timezone(timedelta(hours=7))
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/131.0 Safari/537.36")
 IN_STOCK = {"instock", "preorder", "limitedavailability", "onlineonly", "presale"}
+HEALTH_HOURS = (12, 18)  # Bangkok time
 FAIL_ALERT_AFTER = 12  # consecutive failed checks (~1 hour) before a "checker broken" alert
 
 
@@ -383,6 +384,18 @@ def run_check(dry):
 
     # Daily heartbeat commit keeps the repo "active" (GitHub pauses idle schedules after 60 days).
     state["heartbeat"] = now.strftime("%Y-%m-%d")
+
+    # Health report rides on the automatic check runs: GitHub's own scheduler never fires for
+    # this repo, so health.yml can't be trusted to run by itself at 12:00 / 18:00.
+    slot = max((h for h in HEALTH_HOURS if now.hour >= h), default=None)
+    key = f"{now:%Y-%m-%d} {slot:02d}" if slot is not None else None
+    if key and source in ("schedule", "cron") and state.get("health_last") != key:
+        state["health_last"] = key  # mark first so a failing send can't repeat every 2 minutes
+        save_state(state)
+        try:
+            run_health()
+        except Exception as e:
+            print(f"[HEALTH FAIL] {e}")
     save_state(state)
 
 
