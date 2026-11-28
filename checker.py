@@ -392,7 +392,7 @@ def run_check(dry):
     slots = [f"{today} {t}" for t in HEALTH_TIMES] + [x for x in EXTRA_HEALTH if x.startswith(today)]
     due = [k for k in slots if k[11:] <= hhmm]
     key = max(due) if due else None
-    if key and source in ("schedule", "cron") and state.get("health_last") != key:
+    if key and source in ("schedule", "cron") and state.get("health_last") not in (key, key[:13]):
         state["health_last"] = key  # mark first so a failing send can't repeat every 2 minutes
         save_state(state)
         try:
