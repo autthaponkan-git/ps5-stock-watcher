@@ -1,7 +1,11 @@
 {
   "autotest_remaining": 0,
   "autotest_total": 4,
-  "health_last": "2026-11-28 18:00",
+  "health_last": "2026-11-28 20:00",
+  "health_sent": [
+    "2026-11-28 18:00",
+    "2026-11-28 20:00"
+  ],
   "heartbeat": "2026-11-28",
   "items": {
     "Advice · PS5 Pro": {
