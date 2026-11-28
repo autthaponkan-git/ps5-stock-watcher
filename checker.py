@@ -392,8 +392,14 @@ def run_check(dry):
     slots = [f"{today} {t}" for t in HEALTH_TIMES] + [x for x in EXTRA_HEALTH if x.startswith(today)]
     due = [k for k in slots if k[11:] <= hhmm]
     key = max(due) if due else None
-    if key and source in ("schedule", "cron") and state.get("health_last") not in (key, key[:13]):
-        state["health_last"] = key  # mark first so a failing send can't repeat every 2 minutes
+    # Remember every slot already sent today, so adding/removing slots never resends one.
+    sent = [k for k in state.get("health_sent", []) if k.startswith(today)]
+    legacy = state.get("health_last") or ""
+    if legacy.startswith(today):
+        sent.append(legacy if len(legacy) > 13 else legacy + ":00")
+    if key and source in ("schedule", "cron") and key not in sent:
+        state["health_sent"] = sorted(set(sent + [key]))  # mark first so a failing send can't repeat
+        state["health_last"] = key
         save_state(state)
         try:
             run_health()
