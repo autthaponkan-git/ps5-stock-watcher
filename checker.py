@@ -27,7 +27,8 @@ BKK = timezone(timedelta(hours=7))
 UA = ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
       "(KHTML, like Gecko) Chrome/131.0 Safari/537.36")
 IN_STOCK = {"instock", "preorder", "limitedavailability", "onlineonly", "presale"}
-HEALTH_HOURS = (7, 12, 18)  # Bangkok time
+HEALTH_TIMES = ("07:00", "12:00", "18:00")  # Bangkok time
+EXTRA_HEALTH = ("2026-11-28 19:40",)  # one-off test reports (date + time)
 FAIL_ALERT_AFTER = 12  # consecutive failed checks (~1 hour) before a "checker broken" alert
 
 
@@ -387,8 +388,10 @@ def run_check(dry):
 
     # Health report rides on the automatic check runs: GitHub's own scheduler never fires for
     # this repo, so health.yml can't be trusted to run by itself at 12:00 / 18:00.
-    slot = max((h for h in HEALTH_HOURS if now.hour >= h), default=None)
-    key = f"{now:%Y-%m-%d} {slot:02d}" if slot is not None else None
+    hhmm, today = now.strftime("%H:%M"), now.strftime("%Y-%m-%d")
+    slots = [f"{today} {t}" for t in HEALTH_TIMES] + [x for x in EXTRA_HEALTH if x.startswith(today)]
+    due = [k for k in slots if k[11:] <= hhmm]
+    key = max(due) if due else None
     if key and source in ("schedule", "cron") and state.get("health_last") != key:
         state["health_last"] = key  # mark first so a failing send can't repeat every 2 minutes
         save_state(state)
